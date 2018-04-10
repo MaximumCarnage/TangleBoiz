@@ -36,9 +36,9 @@ gameScene.create = function() {
 
 	this.player = this.physics.add.sprite(window.innerWidth * window.devicePixelRatio,30 , 'player');
 
-	var map1 = this.make.tilemap({key : 'level1'});
+	var map1 = this.make.tilemap({key : 'level1',tileWidth: 16, tileHeight: 16});
 	 var tileset = map1.addTilesetImage('desert_1_0_7');
-    var layer = map1.createStaticLayer(0, tileset, 0, 0);
+    var layer = map1.createDynamicLayer(0, tileset, 0, 0);
 	layer.setScale(2);
 	layer.setCollisionByProperty({ collides: true });
 	//this.physics.add.collider(this.player, this.layer);
