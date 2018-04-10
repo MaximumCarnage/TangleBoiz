@@ -34,14 +34,15 @@ gameScene.create = function() {
 	bg.tint = 0x444444;
   	bg.setOrigin(0,0);
 
-	this.player = this.physics.add.sprite(window.innerWidth * window.devicePixelRatio/2+160,30 , 'player');
+	this.player = this.physics.add.sprite(window.innerWidth * window.devicePixelRatio,30 , 'player');
 
 	var map1 = this.make.tilemap({key : 'level1'});
 	 var tileset = map1.addTilesetImage('desert_1_0_7');
     var layer = map1.createStaticLayer(0, tileset, 0, 0);
 	layer.setScale(2);
 	layer.setCollisionByProperty({ collides: true });
-	this.physics.setCollisionMapFromTilemapLayer(layer, { slopeProperty: 'slope' });
+	//this.physics.add.collider(this.player, this.layer);
+	//this.physics.setCollisionMapFromTilemapLayer(layer, { slopeProperty: 'slope' });
 
 	this.cameras.main.startFollow(this.player);
 	this.cameras.main.setBounds(0, 0, map1.widthInPixels*2, map1.heightInPixels*2);
