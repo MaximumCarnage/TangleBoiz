@@ -25,6 +25,7 @@ gameScene.preload = function() {
 	this.load.spritesheet('player', 'assets/sprites/MainCharactersprite.png',{ frameWidth: 100, frameHeight: 125 });
 	this.load.tilemapCSV('level1', 'assets/maps/Maze1.csv');
 	this.load.image('desert_1_0_7', 'assets/tilesets/Mazetiles.png');
+	this.load.image('Fog', 'assets/images/Fog.png');
 }	
 
 gameScene.create = function() {
@@ -53,6 +54,9 @@ gameScene.create = function() {
         frameRate: 20,
         repeat: -1
     });
+
+	 this.fog = this.add.sprite(this.player.x, this.player.y, 'Fog');
+
 }
 
 gameScene.update = function() {
@@ -80,7 +84,8 @@ gameScene.update = function() {
   	}
 
   	//this.physics.collide(this.player, this.layer);
-
+  	this.fog.x = this.player.x;
+  	this.fog.y = this.player.y;
   	
 }
 
