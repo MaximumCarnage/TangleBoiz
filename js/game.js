@@ -22,8 +22,8 @@ gameScene.init = function() {
 
 gameScene.preload = function() {
 	this.load.image('background', 'assets/images/Desert.png');
-	this.load.image('player', 'assets/sprites/MainCharacterstatic.png');
-	this.load.tilemapTiledJSON('level1', 'assets/maps/Maze1.json');
+	this.load.spritesheet('player', 'assets/sprites/MainCharactersprite.png',{ frameWidth: 100, frameHeight: 125 });
+	this.load.tilemapCSV('level1', 'assets/maps/Maze1.csv');
 	this.load.image('desert_1_0_7', 'assets/tilesets/Mazetiles.png');
 }	
 
@@ -34,23 +34,59 @@ gameScene.create = function() {
 	bg.tint = 0x444444;
   	bg.setOrigin(0,0);
 
-	this.player = this.physics.add.sprite(window.innerWidth * window.devicePixelRatio,30 , 'player');
+	this.player = this.physics.add.sprite(window.innerWidth/2,30 , 'player');
 
-	var map1 = this.make.tilemap({key : 'level1',tileWidth: 16, tileHeight: 16});
-	 var tileset = map1.addTilesetImage('desert_1_0_7');
+	var map1 = this.make.tilemap({key : 'level1',tileWidth: 32, tileHeight: 32 });
+	var tileset = map1.addTilesetImage('desert_1_0_7');
     var layer = map1.createDynamicLayer(0, tileset, 0, 0);
 	layer.setScale(2);
-	layer.setCollisionByProperty({ collides: true });
-	//this.physics.add.collider(this.player, this.layer);
-	//this.physics.setCollisionMapFromTilemapLayer(layer, { slopeProperty: 'slope' });
+	
+	 this.map1.setCollisionByExclusion([1], true, layer);
+	
+	
 
-	this.cameras.main.startFollow(this.player);
+	
 	this.cameras.main.setBounds(0, 0, map1.widthInPixels*2, map1.heightInPixels*2);
+	this.cameras.main.startFollow(this.player);
+
+	 this.anims.create({
+        key: 'Walk',
+        frames: this.anims.generateFrameNumbers('player', { start: 0, end: 5 }),
+        frameRate: 20,
+        repeat: -1
+    });
 }
 
 gameScene.update = function() {
+
+	
+	
+	this.player.body.setVelocity(0);
+
+	var targetAngle = (360 / (2 * Math.PI)) * Phaser.Math.Angle.Between(
+          this.player.x, this.player.y,
+          this.input.activePointer.x, this.input.activePointer.y) + 90;
+	if(targetAngle < 0)
+	{
+        targetAngle += 360;
+	}
+
+	
 	if (this.input.activePointer.isDown) {
     	this.physics.moveTo(this.player, this.input.x + this.cameras.main.scrollX, this.input.y + this.cameras.main.scrollY, null, 1000);
+  		this.player.body.rotation = targetAngle;
+  		this.player.anims.play('Walk', true);
   	}
+  	else{
+  		this.player.anims.play('Walk', false);
+  	}
+
+  	this.game.physics.arcade.collide(this.player, layer);
+
+  	
+}
+
+gameScene.endgame = function(){
+	console.log("YouDED");
 }
 
