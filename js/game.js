@@ -41,9 +41,7 @@ gameScene.create = function() {
     var layer = map1.createDynamicLayer(0, tileset, 0, 0);
 	layer.setScale(2);
 	
-	 this.map1.setCollisionByExclusion([1], true, layer);
-	
-	
+	//map1.setCollisionBetween(54, 83);
 
 	
 	this.cameras.main.setBounds(0, 0, map1.widthInPixels*2, map1.heightInPixels*2);
@@ -81,7 +79,7 @@ gameScene.update = function() {
   		this.player.anims.play('Walk', false);
   	}
 
-  	this.game.physics.arcade.collide(this.player, layer);
+  	//this.physics.collide(this.player, this.layer);
 
   	
 }
