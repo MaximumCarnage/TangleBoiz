@@ -46,6 +46,7 @@ gameScene.create = function() {
 	layer.setCollisionByExclusion([ -1 ]);
 
 	this.player = this.physics.add.sprite(window.innerWidth/2,30 , 'player');
+	this.player.setScale(0.5);
 
 	this.physics.add.collider(this.player, layer);
 	
@@ -64,28 +65,36 @@ gameScene.create = function() {
 }
 
 gameScene.update = function() {
-
 	
 	
-	this.player.body.setVelocity(0);
+	
 
 	var targetAngle = (360 / (2 * Math.PI)) * Phaser.Math.Angle.Between(
           this.player.x, this.player.y,
-          this.input.activePointer.x, this.input.activePointer.y) + 90;
+          this.input.activePointer.x, this.input.activePointer.y)+90 ;
+
+
+
 	if(targetAngle < 0)
 	{
         targetAngle += 360;
 	}
 
-	
+	console.log(targetAngle);
+
 	if (this.input.activePointer.isDown) {
-    	this.physics.moveTo(this.player, this.input.x + this.cameras.main.scrollX, this.input.y + this.cameras.main.scrollY, null, 1000);
+    	this.physics.moveTo(this.player, this.input.activePointer.x + this.cameras.main.scrollX, this.input.activePointer.y + this.cameras.main.scrollY, 300);
   		this.player.body.rotation = targetAngle;
   		this.player.anims.play('Walk', true);
   	}
   	else{
   		this.player.anims.play('Walk', false);
+  		this.player.body.setVelocity(0);
   	}
+
+  	// if(this.player.x == this.input.activePointer.x && this.player.y == this.input.activePointer.y ){
+  	// 	this.player.body.setVelocity(0);
+  	// }
 
   	
   	//this.fog.x = this.player.x;
