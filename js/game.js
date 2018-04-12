@@ -23,8 +23,8 @@ gameScene.init = function() {
 gameScene.preload = function() {
 	this.load.image('background', 'assets/images/Desert.png');
 	this.load.spritesheet('player', 'assets/sprites/MainCharactersprite.png',{ frameWidth: 100, frameHeight: 125 });
-	this.load.tilemapCSV('level1', 'assets/maps/Maze1.csv');
-	this.load.image('desert_1_0_7', 'assets/tilesets/Mazetiles.png');
+	this.load.tilemapTiledJSON('map1', 'assets/maps/Maze1.json');
+	this.load.image('Tiles', 'assets/tilesets/Mazetiles.png');
 	this.load.image('Fog', 'assets/images/Fog.png');
 }	
 
@@ -35,17 +35,21 @@ gameScene.create = function() {
 	bg.tint = 0x444444;
   	bg.setOrigin(0,0);
 
-	this.player = this.physics.add.sprite(window.innerWidth/2,30 , 'player');
+	
 
-	var map1 = this.make.tilemap({key : 'level1',tileWidth: 32, tileHeight: 32 });
-	var tileset = map1.addTilesetImage('desert_1_0_7');
-    var layer = map1.createDynamicLayer(0, tileset, 0, 0);
+	var map1 = this.add.tilemap('map1');
+	var tileset = map1.addTilesetImage('Tiles');
+    var layer = map1.createDynamicLayer('Walls', tileset,0,0);
+
 	layer.setScale(2);
 	
-	//map1.setCollisionBetween(54, 83);
+	layer.setCollisionByExclusion([ -1 ]);
 
+	this.player = this.physics.add.sprite(window.innerWidth/2,30 , 'player');
+
+	this.physics.add.collider(this.player, layer);
 	
-	this.cameras.main.setBounds(0, 0, map1.widthInPixels*2, map1.heightInPixels*2);
+	this.cameras.main.setBounds(0, 0, map1.widthInPixels*2+860, map1.heightInPixels*2+440);
 	this.cameras.main.startFollow(this.player);
 
 	 this.anims.create({
@@ -55,7 +59,7 @@ gameScene.create = function() {
         repeat: -1
     });
 
-	 this.fog = this.add.sprite(this.player.x, this.player.y, 'Fog');
+	 //this.fog = this.add.sprite(this.player.x, this.player.y, 'Fog');
 
 }
 
@@ -83,9 +87,9 @@ gameScene.update = function() {
   		this.player.anims.play('Walk', false);
   	}
 
-  	//this.physics.collide(this.player, this.layer);
-  	this.fog.x = this.player.x;
-  	this.fog.y = this.player.y;
+  	
+  	//this.fog.x = this.player.x;
+  	//this.fog.y = this.player.y;
   	
 }
 
