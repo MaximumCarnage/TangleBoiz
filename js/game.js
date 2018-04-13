@@ -35,8 +35,6 @@ gameScene.create = function() {
 	bg.tint = 0x444444;
   	bg.setOrigin(0,0);
 
-	
-
 	var map1 = this.add.tilemap('map1');
 	var tileset = map1.addTilesetImage('Tiles');
     var layer = map1.createDynamicLayer('Walls', tileset,0,0);
@@ -65,24 +63,17 @@ gameScene.create = function() {
 }
 
 gameScene.update = function() {
-	
-	
-	
-
 	var targetAngle = (360 / (2 * Math.PI)) * Phaser.Math.Angle.Between(
           this.player.x, this.player.y,
-          this.input.activePointer.x, this.input.activePointer.y)+90 ;
+          this.input.x, this.input.y)+90 ;
 
-
-
-	if(targetAngle < 0)
-	{
+	if(targetAngle < 0) {
         targetAngle += 360;
 	}
 
-	console.log(targetAngle);
+	console.log(this.player.anims.frameRate);
 
-	if (this.input.activePointer.isDown) {
+	if (this.input.activePointer.isDown ) {
     	this.physics.moveTo(this.player, this.input.activePointer.x + this.cameras.main.scrollX, this.input.activePointer.y + this.cameras.main.scrollY, 300);
   		this.player.body.rotation = targetAngle;
   		this.player.anims.play('Walk', true);
@@ -102,7 +93,12 @@ gameScene.update = function() {
   	
 }
 
-gameScene.endgame = function(){
-	console.log("YouDED");
+gameScene.losegame = function(){
+	console.log("YouLose");
 }
+
+gameScene.winmap1 = function(){
+	console.log("YouWin");
+}
+
 
