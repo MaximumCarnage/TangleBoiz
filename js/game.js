@@ -22,9 +22,10 @@ gameScene.init = function() {
 
 gameScene.preload = function() {
 	this.load.image('background', 'assets/images/Desert.png');
-	this.load.image('player', 'assets/sprites/MainCharacterstatic.png');
-	this.load.tilemapTiledJSON('level1', 'assets/maps/Maze1.json');
-	this.load.image('desert_1_0_7', 'assets/tilesets/Mazetiles.png');
+	this.load.spritesheet('player', 'assets/sprites/MainCharactersprite.png',{ frameWidth: 100, frameHeight: 125 });
+	this.load.tilemapTiledJSON('map1', 'assets/maps/Maze1.json');
+	this.load.image('Tiles', 'assets/tilesets/Mazetiles.png');
+	this.load.image('Fog', 'assets/images/Fog.png');
 }	
 
 gameScene.create = function() {
@@ -34,22 +35,74 @@ gameScene.create = function() {
 	bg.tint = 0x444444;
   	bg.setOrigin(0,0);
 
-	this.player = this.physics.add.sprite(window.innerWidth * window.devicePixelRatio/2+160,30 , 'player');
+	
 
-	var map1 = this.make.tilemap({key : 'level1'});
-	 var tileset = map1.addTilesetImage('desert_1_0_7');
-    var layer = map1.createStaticLayer(0, tileset, 0, 0);
+	var map1 = this.add.tilemap('map1');
+	var tileset = map1.addTilesetImage('Tiles');
+    var layer = map1.createDynamicLayer('Walls', tileset,0,0);
+
 	layer.setScale(2);
-	layer.setCollisionByProperty({ collides: true });
-	this.physics.setCollisionMapFromTilemapLayer(layer, { slopeProperty: 'slope' });
+	
+	layer.setCollisionByExclusion([ -1 ]);
 
+	this.player = this.physics.add.sprite(window.innerWidth/2,30 , 'player');
+	this.player.setScale(0.5);
+
+	this.physics.add.collider(this.player, layer);
+	
+	this.cameras.main.setBounds(0, 0, map1.widthInPixels*2+860, map1.heightInPixels*2+440);
 	this.cameras.main.startFollow(this.player);
-	this.cameras.main.setBounds(0, 0, map1.widthInPixels*2, map1.heightInPixels*2);
+
+	 this.anims.create({
+        key: 'Walk',
+        frames: this.anims.generateFrameNumbers('player', { start: 0, end: 5 }),
+        frameRate: 20,
+        repeat: -1
+    });
+
+	 //this.fog = this.add.sprite(this.player.x, this.player.y, 'Fog');
+
 }
 
 gameScene.update = function() {
+	
+	
+	
+
+	var targetAngle = (360 / (2 * Math.PI)) * Phaser.Math.Angle.Between(
+          this.player.x, this.player.y,
+          this.input.activePointer.x, this.input.activePointer.y)+90 ;
+
+
+
+	if(targetAngle < 0)
+	{
+        targetAngle += 360;
+	}
+
+	console.log(targetAngle);
+
 	if (this.input.activePointer.isDown) {
-    	this.physics.moveTo(this.player, this.input.x + this.cameras.main.scrollX, this.input.y + this.cameras.main.scrollY, null, 1000);
+    	this.physics.moveTo(this.player, this.input.activePointer.x + this.cameras.main.scrollX, this.input.activePointer.y + this.cameras.main.scrollY, 300);
+  		this.player.body.rotation = targetAngle;
+  		this.player.anims.play('Walk', true);
   	}
+  	else{
+  		this.player.anims.play('Walk', false);
+  		this.player.body.setVelocity(0);
+  	}
+
+  	// if(this.player.x == this.input.activePointer.x && this.player.y == this.input.activePointer.y ){
+  	// 	this.player.body.setVelocity(0);
+  	// }
+
+  	
+  	//this.fog.x = this.player.x;
+  	//this.fog.y = this.player.y;
+  	
+}
+
+gameScene.endgame = function(){
+	console.log("YouDED");
 }
 
