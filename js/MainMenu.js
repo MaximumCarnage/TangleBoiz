@@ -1,24 +1,12 @@
-  let MainMenu = new Phaser.Scene('MainMenu');
+class MainMenu extends Phaser.Scene{
+	constructor(){
+			super({key:"MainMenu"});
+		}
 
-  let config = {
-  type: Phaser.Canvas,  
-  width: window.innerWidth * window.devicePixelRatio, 
-  height: window.innerHeight * window.devicePixelRatio,
-   physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 0 }
-        }
-   }, 
-  scene: MainMenuScene
-};
+	
 
-var game = new Phaser.Game(config);
-
-
-	var titlescreen;
-
-MainMenuScene.create = function(){
+	create(){
+		var titlescreen;
 
 		this.createButton(game, "Play", game.world.centerX, game.world.centerY + 32, 300, 100, 
 				function(){
@@ -31,7 +19,12 @@ MainMenuScene.create = function(){
 				});
 		titlescreen = game.add.sprite(game.world.centerX,game.world.centerY - 192, 'titlescreen');
 		titlescreen.anchor.setTo(0.5, 0.5);
-};
+	}
+	update() {
+
+	}
+
+}
 
 	// update:function(game){
 
