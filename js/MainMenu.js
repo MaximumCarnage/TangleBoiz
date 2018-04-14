@@ -3,44 +3,27 @@ class MainMenu extends Phaser.Scene{
 			super({key:"MainMenu"});
 		}
 
-	
+	preload() {
+		this.load.image('background', 'assets/images/tangleBoizTitleScreen.png');
+		this.load.image('playIcon', 'assets/images/playIconTangleBoiz.png');
+		this.load.image('quitIcon', 'assets/images/quitIconTangleBoiz.png');
+	}	
 
 	create(){
-		var titlescreen;
+		// var titlescreen;
 
-		this.createButton(game, "Play", game.world.centerX, game.world.centerY + 32, 300, 100, 
-				function(){
-					this.state.start('Level1');
-				});
+		let bg = this.add.sprite(0, 0, 'background');
+		bg.setScale(.5);
+	  	bg.setOrigin(0,0);
 
-		this.createButton(game, "About", game.world.centerX, game.world.centerY + 182, 300, 100, 
-				function(){
-					console.log('About');
-				});
-		titlescreen = game.add.sprite(game.world.centerX,game.world.centerY - 192, 'titlescreen');
-		titlescreen.anchor.setTo(0.5, 0.5);
+	  	let sprite = this.add.sprite(2, 0, 'playIcon');
+	  	sprite.setScale(.2);
+	  	sprite.setOrigin(2,2);
 	}
-	update() {
 
-	}
+
+	// update() {
+
+	// }
 
 }
-
-	// update:function(game){
-
-	// };
-
-	// createButton:function(game,string,x,y,w,h,callbackl){
-	// 	var button1 = game.add.button(x,y, 'button', callback, this, 2, 1, 0);
-
-	// 	button1.anchor.setTo(0.5, 0.5);
-	// 	button1.width = w;
-	// 	button.height = h;
-
-	// 	var txt = game.add.text(button1.x, button1.y, string, {
-	// 		font: "14px Arial",
-	// 		fill: "#fff",
-	// 		align: "center"
-	// 	});
-	// 	txt.anchor.setTo(0.5, 0.5);
-	// }
