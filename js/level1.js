@@ -31,10 +31,14 @@ class level1 extends Phaser.Scene{
 		
 		layer.setCollisionByExclusion([ -1 ]);
 
+		this.winzone = this.physics.add.sprite(map1.widthInPixels*2,'endzone');
+
+		this.timerEvent = this.time.addEvent({ delay: 4000, repeat: 9 });
+
 		this.player = this.physics.add.sprite(window.innerWidth/2,30 , 'player');
 		this.player.setScale(0.5);
 
-		this.physics.add.collider(this.player, layer);
+		this.physics.add.collider(this.player, layer,this.losegame() );
 		
 		this.cameras.main.setBounds(0, 0, map1.widthInPixels*2+860, map1.heightInPixels*2+440);
 		this.cameras.main.startFollow(this.player);
@@ -51,29 +55,28 @@ class level1 extends Phaser.Scene{
 	}
 
 	update() {
+
 		var targetAngle = (360 / (2 * Math.PI)) * Phaser.Math.Angle.Between(
 	          this.player.x, this.player.y,
-	          this.input.x, this.input.y)+90 ;
+	          this.input.x, this.input.y)+90;
 
+		
+		console.log("Time: " + this.time );
 		if(targetAngle < 0) {
+			//console.log("fucked");
 	        targetAngle += 360;
 		}
+		
 
-		console.log(this.player.anims.frameRate);
-
-		if (this.input.activePointer.isDown ) {
-	    	this.physics.moveTo(this.player, this.input.activePointer.x + this.cameras.main.scrollX, this.input.activePointer.y + this.cameras.main.scrollY, 300);
-	  		this.player.body.rotation = targetAngle;
+		if (this.input.activePointer.isDown) {
+	    	this.physics.moveTo(this.player, this.input.activePointer.x + this.cameras.main.scrollX, this.input.activePointer.y + this.cameras.main.scrollY, 200);
+	  		this.player.body.rotation =  targetAngle;
 	  		this.player.anims.play('Walk', true);
 	  	}
 	  	else{
 	  		this.player.anims.play('Walk', false);
 	  		this.player.body.setVelocity(0);
 	  	}
-
-	  	// if(this.player.x == this.input.activePointer.x && this.player.y == this.input.activePointer.y ){
-	  	// 	this.player.body.setVelocity(0);
-	  	// }
 
 	  	
 	  	//this.fog.x = this.player.x;
@@ -82,10 +85,11 @@ class level1 extends Phaser.Scene{
 	}
 
 	losegame(){
-		console.log("YouLose");
+		//this.scene.start('level1');
 	}
 
 	winmap1(){
 		console.log("YouWin");
+
 	}
 }
