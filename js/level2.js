@@ -1,7 +1,7 @@
 
-class level1 extends Phaser.Scene{
+class level2 extends Phaser.Scene{
 		constructor(){
-			super({key:"level1"});
+			super({key:"level2"});
 		}
 
 	init() {
@@ -11,7 +11,7 @@ class level1 extends Phaser.Scene{
 	preload() {
 		this.load.image('background', 'assets/images/Desert.png');
 		this.load.spritesheet('player', 'assets/sprites/MainCharactersprite.png',{ frameWidth: 100, frameHeight: 125 });
-		this.load.tilemapTiledJSON('map1', 'assets/maps/Maze1.json');
+		this.load.tilemapTiledJSON('map2', 'assets/maps/Maze2.json');
 		this.load.image('Tiles', 'assets/tilesets/Mazetiles.png');
 		this.load.image('Fog', 'assets/images/Fog.png');
 		this.load.image('EndZone', 'assets/images/EndZone.png');
@@ -24,17 +24,16 @@ class level1 extends Phaser.Scene{
 		bg.tint = 0x444444;
 	  	bg.setOrigin(0,0);
 
-
-
-		var map1 = this.add.tilemap('map1');
+		var map1 = this.add.tilemap('map2');
 		var tileset = map1.addTilesetImage('Tiles');
 	    var layer = map1.createDynamicLayer('Walls', tileset,0,0);
 		layer.setScale(2);
 		layer.setCollisionByExclusion([ -1 ]);
 
-		this.end = this.add.image(map1.widthInPixels +70, map1.heightInPixels*2, 'EndZone');
+		this.end = this.add.image(map1.widthInPixels, map1.heightInPixels*2, 'EndZone');
 		this.end.setScale(0.5);
 
+		this.timerEvent = this.time.addEvent({ delay: 4000, repeat: 9 });
 
 		this.player = this.physics.add.sprite(window.innerWidth/2,30 , 'player');
 		this.player.setScale(0.5);
@@ -51,7 +50,7 @@ class level1 extends Phaser.Scene{
 	        repeat: -1
 	    });
 
-		 this.fog = this.add.sprite(this.player.x, this.player.y, 'Fog');
+		  this.fog = this.add.sprite(this.player.x, this.player.y, 'Fog');
 
 	}
 
@@ -59,20 +58,19 @@ class level1 extends Phaser.Scene{
 
 		var targetAngle = (360 / (2 * Math.PI)) * Phaser.Math.Angle.Between(
 	          this.player.x, this.player.y,
-	          this.input.x+ this.cameras.main.scrollX, this.input.y + this.cameras.main.scrollY)+90;
+	         this.input.x + this.cameras.main.scrollX, this.input.y + this.cameras.main.scrollY)+90;
 
 		if(Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.end.getBounds())){
-			this.scene.start('level2');
+			this.scene.start('level3');
 		}
-		
-		
+
 		if(targetAngle < 0) {
 	        targetAngle += 360;
 		}
 		
 
 		if (this.input.activePointer.isDown) {
-	    	this.physics.moveTo(this.player, this.input.activePointer.x + this.cameras.main.scrollX, this.input.activePointer.y + this.cameras.main.scrollY, 100) ;
+	    	this.physics.moveTo(this.player, this.input.activePointer.x + this.cameras.main.scrollX, this.input.activePointer.y + this.cameras.main.scrollY, 150);
 	  		this.player.body.rotation =  targetAngle;
 	  		this.player.anims.play('Walk', true);
 	  	}
@@ -87,4 +85,5 @@ class level1 extends Phaser.Scene{
 	  	
 	}
 
+	
 }
